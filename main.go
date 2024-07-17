@@ -1,19 +1,9 @@
 package main
 
-type User struct {
-	Name string
+type Reader interface {
+	Read(p []byte) (n int, err error)
 }
 
-func main() {
-	age := getAge()
-	canDrink(age)
-}
-
-func canDrink(age *int) bool {
-	return *age >= 18
-}
-
-func getAge() *int {
-	age := 18
-	return &age
+type Reader2 interface {
+	Read() (p []byte, err error)
 }
