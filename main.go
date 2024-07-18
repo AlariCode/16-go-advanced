@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -11,10 +12,15 @@ import (
 
 func main() {
 	t := time.Now()
+	var wg sync.WaitGroup
 	for i := 0; i < 10; i++ {
-		go getHttpCode()
+		wg.Add(1)
+		go func() {
+			getHttpCode()
+			wg.Done()
+		}()
 	}
-	time.Sleep(time.Millisecond * 1100)
+	wg.Wait()
 	fmt.Println(time.Since(t))
 }
 
