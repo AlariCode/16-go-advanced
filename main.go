@@ -7,8 +7,12 @@ import (
 
 func main() {
 	code := make(chan int)
-	go getHttpCode(code)
-	<-code
+	for i := 0; i < 10; i++ {
+		go getHttpCode(code)
+	}
+	for res := range code {
+		fmt.Printf("Код: %d\n", res)
+	}
 }
 
 func getHttpCode(codeCh chan int) {
@@ -16,6 +20,5 @@ func getHttpCode(codeCh chan int) {
 	if err != nil {
 		fmt.Printf("Ошибка %s", err.Error())
 	}
-	fmt.Printf("Код: %d\n", resp.StatusCode)
 	codeCh <- resp.StatusCode
 }
