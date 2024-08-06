@@ -30,10 +30,12 @@ func main() {
 	for _, url := range urlSlice {
 		go ping(url, respCh, errCh)
 	}
-	for i := 0; i < len(urlSlice); i++ {
-		errRes := <-errCh
-		fmt.Println(errRes)
-		res := <-respCh
-		fmt.Println(res)
+	for range urlSlice {
+		select {
+		case err := <-errCh:
+			fmt.Println(err)
+		case res := <-respCh:
+			fmt.Println(res)
+		}
 	}
 }
