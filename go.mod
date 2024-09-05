@@ -5,6 +5,8 @@ go 1.22.5
 require (
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/joho/godotenv v1.5.1
+	gorm.io/driver/postgres v1.5.9
+	gorm.io/gorm v1.25.11
 )
 
 require (
@@ -23,6 +25,4 @@ require (
 	golang.org/x/sync v0.8.0 // indirect
 	golang.org/x/sys v0.23.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
-	gorm.io/driver/postgres v1.5.9 // indirect
-	gorm.io/gorm v1.25.11 // indirect
 )
