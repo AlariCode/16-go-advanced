@@ -10,20 +10,29 @@ import (
 	"go/adv-demo/pkg/db"
 	"go/adv-demo/pkg/middleware"
 	"net/http"
+	"time"
 )
 
-func main() {
-	type key int
-	const EmailKey key = 0
-	ctx := context.Background()
-	ctxWithValue := context.WithValue(ctx, EmailKey, "a@a.ru")
-
-	if userEmail, ok := ctxWithValue.Value(EmailKey).(string); ok {
-		fmt.Println(userEmail)
-	} else {
-		fmt.Println("No value")
+func tickOperation(ctx context.Context) {
+	ticker := time.NewTicker(200 * time.Millisecond)
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Println("Tick")
+		case <-ctx.Done():
+			fmt.Println("Cancel")
+			return
+		}
 	}
+}
 
+func main() {
+	ctx, cancel := context.WithCancel(context.Background())
+	go tickOperation(ctx)
+
+	time.Sleep(2 * time.Second)
+	cancel()
+	time.Sleep(2 * time.Second)
 }
 
 func main2() {
