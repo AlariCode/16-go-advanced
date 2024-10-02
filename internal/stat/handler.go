@@ -1,16 +1,16 @@
 package stat
 
 import (
-	"fmt"
 	"go/adv-demo/configs"
 	"go/adv-demo/pkg/middleware"
+	"go/adv-demo/pkg/res"
 	"net/http"
 	"time"
 )
 
 const (
-	FilterByDay   = "day"
-	FilterByMonth = "month"
+	GroupByDay   = "day"
+	GroupByMonth = "month"
 )
 
 type StatHandlerDeps struct {
@@ -42,10 +42,11 @@ func (h *StatHandler) GetStat() http.HandlerFunc {
 			return
 		}
 		by := r.URL.Query().Get("by")
-		if by != FilterByDay && by != FilterByMonth {
+		if by != GroupByDay && by != GroupByMonth {
 			http.Error(w, "Invalid by param", http.StatusBadRequest)
 			return
 		}
-		fmt.Println(from, to, by)
+		stats := h.StatRepository.GetStats(by, from, to)
+		res.Json(w, stats, 200)
 	}
 }
